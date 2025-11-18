@@ -1,29 +1,73 @@
 "use client";
+
+import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "../lib/auth";
 
+const navItems = [
+  { name: "Overview", href: "/dashboard/overview" },
+  { name: "Orders", href: "/dashboard/orders" },
+  { name: "Leads", href: "/dashboard/leads" },
+  { name: "Profile", href: "/dashboard/profile" },
+];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { signOut } = useAuth();
+  const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <aside className="w-64 bg-white p-6 border-r">
-        <h2 className="text-2xl font-bold mb-6">RiseGen</h2>
-        <nav className="space-y-2">
-          <Link href="/dashboard/overview" className="block hover:text-blue-600">Overview</Link>
-          <Link href="/dashboard/leads" className="block hover:text-blue-600">Leads</Link>
-          <Link href="/dashboard/orders" className="block hover:text-blue-600">Orders</Link>
-          <Link href="/dashboard/account" className="block hover:text-blue-600">Account</Link>
+    <div className="min-h-screen bg-slate-50 flex text-slate-900">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
+        <div className="px-6 py-5 border-b border-slate-200">
+          <Link href="/dashboard/overview" className="text-2xl font-bold tracking-tight text-blue-700">
+            RiseGen
+          </Link>
+        </div>
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`block px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "text-slate-700 hover:bg-blue-50 hover:text-blue-700"
+                }`}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="p-4 border-t border-slate-200">
           <button
             onClick={signOut}
-            className="mt-6 text-red-600 hover:text-red-800"
+            className="w-full px-3 py-2 text-sm font-semibold text-red-600 border border-red-300 rounded-lg hover:bg-red-50"
           >
-            Sign Out
+            Sign out
           </button>
-        </nav>
+        </div>
       </aside>
-      <main className="flex-1 p-10">{children}</main>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col">
+        {/* Top Header */}
+        <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6">
+          <h1 className="text-lg font-semibold tracking-tight text-slate-800">
+            {pathname.split("/").slice(-1)[0].replace("-", " ").toUpperCase()}
+          </h1>
+          <div className="text-sm text-slate-600">
+            Logged in as <span className="font-medium text-slate-800">{user?.email}</span>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <div className="flex-1 overflow-y-auto p-6">{children}</div>
+      </main>
     </div>
   );
 }
