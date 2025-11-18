@@ -1,5 +1,6 @@
 import "./globals.css";
-import { AuthProvider } from "@/lib/auth";
+import { AuthProvider } from "./lib/auth";
+
 
 export const metadata = {
   title: "RiseGen Leads",
