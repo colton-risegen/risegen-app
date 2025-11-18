@@ -1,41 +1,21 @@
-"use client";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+"use server";
 
-const AuthContext = createContext<any>(null);
+import { cookies } from "next/headers";
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
-  const router = useRouter();
+export async function getUser() {
+  const cookie = cookies().get("user");
+  if (!cookie) return null;
+  try {
+    return JSON.parse(cookie.value);
+  } catch {
+    return null;
+  }
+}
 
-  useEffect(() => {
-    const saved = localStorage.getItem("risegen_user");
-    if (saved) setUser(saved);
-  }, []);
+export async function setUser(user: any) {
+  cookies().set("user", JSON.stringify(user), { path: "/", httpOnly: false });
+}
 
-  const signIn = (email: string) => {
-    localStorage.setItem("risegen_user", email);
-    setUser(email);
-    router.push("/dashboard/overview");
-  };
-
-  const signUp = (email: string) => {
-    localStorage.setItem("risegen_user", email);
-    setUser(email);
-    router.push("/dashboard/overview");
-  };
-
-  const signOut = () => {
-    localStorage.removeItem("risegen_user");
-    setUser(null);
-    router.push("/sign-in");
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, signIn, signUp, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => useContext(AuthContext);
+export async function clearUser() {
+  cookies().delete("user");
+}
