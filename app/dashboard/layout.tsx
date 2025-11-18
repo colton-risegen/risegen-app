@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../lib/auth";
+import Image from "next/image";
 
 const navItems = [
   { name: "Overview", href: "/dashboard/overview" },
@@ -20,11 +21,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-slate-50 flex text-slate-900">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
-        <div className="px-6 py-5 border-b border-slate-200">
-          <Link href="/dashboard/overview" className="text-2xl font-bold tracking-tight text-blue-700">
+        {/* Logo Section */}
+        <div className="px-6 py-5 border-b border-slate-200 flex items-center gap-2">
+          <Image
+            src="/assets/logo.svg"
+            alt="RiseGen Logo"
+            width={26}
+            height={26}
+            className="rounded"
+          />
+          <Link
+            href="/dashboard/overview"
+            className="text-xl font-bold tracking-tight text-slate-800 hover:text-blue-700"
+          >
             RiseGen
           </Link>
         </div>
+
+        {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-2">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -32,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.name}
                 href={item.href}
-                className={`block px-3 py-2 rounded-lg text-sm font-medium transition ${
+                className={`block px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive
                     ? "bg-blue-600 text-white shadow-sm"
                     : "text-slate-700 hover:bg-blue-50 hover:text-blue-700"
@@ -43,12 +57,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             );
           })}
         </nav>
+
+        {/* Sign Out */}
         <div className="p-4 border-t border-slate-200">
           <button
             onClick={signOut}
             className="w-full px-3 py-2 text-sm font-semibold text-red-600 border border-red-300 rounded-lg hover:bg-red-50"
           >
-            Sign out
+            Sign Out
           </button>
         </div>
       </aside>
@@ -56,9 +72,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content */}
       <main className="flex-1 flex flex-col">
         {/* Top Header */}
-        <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6">
-          <h1 className="text-lg font-semibold tracking-tight text-slate-800">
-            {pathname.split("/").slice(-1)[0].replace("-", " ").toUpperCase()}
+        <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 sticky top-0 z-40">
+          <h1 className="text-lg font-semibold tracking-tight text-slate-800 capitalize">
+            {pathname.split("/").slice(-1)[0].replace("-", " ")}
           </h1>
           <div className="text-sm text-slate-600">
             Logged in as <span className="font-medium text-slate-800">{user?.email}</span>
