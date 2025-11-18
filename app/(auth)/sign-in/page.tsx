@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "../../lib/auth";
 import { useState } from "react";
 
 export default function SignInPage() {
