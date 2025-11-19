@@ -12,6 +12,5 @@ export async function GET() {
     order_state: "OH",
   };
 
-  console.log("✅ Test order sent:", testOrder);
-  return NextResponse.json({ success: true, order: testOrder }, { status: 200 });
+  return NextResponse.json({ success: true, order: testOrder });
 }
