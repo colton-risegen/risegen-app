@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function GET() {
   const testOrder = {
     order_id: "TEST123",
     order_date_time: new Date().toISOString(),
