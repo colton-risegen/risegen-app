@@ -2,13 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* App-wide reset & theme */
-html, body {
-  height: 100%;
-  background-color: #f8fafc;
-  color: #0f172a;
-}
 
-button {
-  @apply rounded-lg font-medium transition-all;
+body {
+@apply bg-brand-gray-light text-brand-gray-dark font-sans;
 }
